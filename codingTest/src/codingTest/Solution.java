@@ -1211,6 +1211,105 @@ public class Solution {
 	   }
 	   return answer;
    }
+   
+   
+   
+   // 숫자 찾기
+   // 정수 num과 k -> k가 몇 번째에 등장하는지 return
+   public int solution54(int num, int k) {
+	   int answer = 0;
+	   String str = String.valueOf(num);
+	   if(str.contains(String.valueOf(k))) {
+		   answer = str.indexOf(String.valueOf(k))+1; // 인덱스 + 1 해줘야 함
+	   } else {
+		   answer = -1;
+	   }
+	   return answer;
+   }
+   
+   
+   
+   // n의 배수 고르기
+   // 정수 n, 정수 배열 numlist -> numlist에서 n의 배수가 아닌 수들을 제거한 배열 return (즉, n의 배수만 담아서 return)
+   public int[] solution55(int n, int[] numlist) {
+	   ArrayList<Integer> arr = new ArrayList<Integer>();
+	   for(int i = 0; i < numlist.length; i++) {
+		   if(numlist[i]%n == 0) {
+			   arr.add(numlist[i]);
+		   }
+	   }
+	   return arr.stream().mapToInt(Integer::intValue).toArray();
+	   // 이렇게 해서 풀기는 했는데, 시간이 오래 걸리는 듯!
+	   // 그냥 리스트로 한 다음에 이걸 int[] answer 에 넣는 게 훨씬 적게 걸리고 편한 듯! (다른 분의 풀이 참고)
+	   // 솔루션 2 : 다른 분의 풀이
+	//   ArrayList<Integer> List = new ArrayList<>();
+	//   for(int i = 0;i < numlist.length; i++){
+//	       if(numlist[i] % n == 0){
+//	           List.add(numlist[i]);
+//	   		}
+//		 }
+//	     int[] answer = new int[List.size()];
+//	     for(int i = 0; i< List.size(); i++){
+//	         answer[i] = List.get(i);
+//	     }
+	//   return answer;
+   } 
+
+   
+   
+   // OX 퀴즈
+   // 덧셈, 뺄셈 수식들이 X [연산자] Y = Z 형태로 들어가 있는 문자열 배열 QUIZ
+   // 수식이 옳으면 O, 틀리면 X를 순서대로 담은 배열 return
+   public String[] solution56(String[] quiz) {
+	   String[] answer = new String[quiz.length]; // O와 X를 담을 배열
+	   String[] array = new String[quiz.length];
+	   
+	   for(int i = 0; i < answer.length; i++) {
+		   array = quiz[i].split(" "); // 공백 기준으로 나누어서, answer의 요소 하나씩 저장 -> 즉, 한 수식씩 저장해서 볼 것 
+		   if (array[1].equals("+")) { // 이러면 array[0] + array[2]
+			   if(Integer.parseInt(array[0]) + Integer.parseInt(array[2]) == Integer.parseInt(array[4])) {
+				   answer[i] = "O";
+			   } else {
+				   answer[i] = "X";
+			   }
+		   }
+		   
+		   if (array[1].equals("-")) {
+			   if(Integer.parseInt(array[0]) - Integer.parseInt(array[2]) == Integer.parseInt(array[4])) {
+				   answer[i] = "O";
+			   } else {
+				   answer[i] = "X";
+			   }
+		   }
+	   }
+	   
+	   /* 솔루션 1 : 나름대로 고민 많이 해서 풀었는데, X 나 Y가 음수일 땐 생각을 아예 못했다. 이러면 수식이 꼬일 수 밖에 없다.
+	    * 공백을 생각해서 trim()을 해줬는데, 그냥 공백을 기준으로 split() 해줘야 했다. */
+//	   for(int i = 0; i < quiz.length; i++) {
+//		   quiz[i].trim(); // 우선 공백을 다 빼줌
+//		   // 정답을 비교해야하니 먼저 정답을 담자. 정답은 = 뒤에 있는 애들
+//		   int rightnum = 0;
+//		   int num = 0;
+//		   if(quiz[i].contains("=-")) {
+//			   rightnum = Integer.parseInt(quiz[i].substring(quiz[i].indexOf("-")+1, quiz[i].length()))*-1;
+//		   } else {
+//			   rightnum = Integer.parseInt(quiz[i].substring(quiz[i].indexOf("=")+1, quiz[i].length()));
+//		   }
+//		   if (quiz[i].contains("+")) {
+//			   num = Integer.parseInt(quiz[i].charAt(0)+"") + Integer.parseInt(quiz[i].charAt(2)+"");
+//		   } else {
+//			   num = Integer.parseInt(quiz[i].charAt(0)+"") - Integer.parseInt(quiz[i].charAt(2)+"");
+//		   }
+//
+//		   if(num == rightnum) {
+//			   answer[i] = "O";
+//		   } else {
+//			   answer[i] = "X";
+//		   }
+//	   }
+	   return answer;
+   }
+   
 } // 클래스의 끝
 
 
