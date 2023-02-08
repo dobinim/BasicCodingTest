@@ -1310,6 +1310,90 @@ public class Solution {
 	   return answer;
    }
    
+   
+   
+   // 제곱수 판별하기
+   // 제곱수 : 어떤 자연수를 제곱했을 때 나오는 정수
+   // 정수 n이 제곱수면 1, 아니면 2 return
+   public int solution57(int n) {
+	   int answer = 0;
+	   int cnt = 0; // 제곱근 카운팅
+	   for(int i = 1; i <= 1000; i++) { // n은 1,000,000 까지니까 가능한 수는 1000까지임.
+		   if(i*i == n) {
+			   cnt++;
+			   answer = 1;
+		   } 
+	   }
+	   if(cnt != 1) {
+		   answer = 2;
+	   }
+	   
+	   // 솔루션 1 : 내가 너무 쉽게 생각했나? 144가 자꾸 2로 나옴. 
+	   // answer에 값 넣는게 아니라 그냥 바로 if문에서 return 되게 하면 해결 (근데 왜 144에서 2로 나오는거지)
+//	   // n이 1부터 1000000 이하의 수이므로 1 ~ 1000 까지의 수 중 하나의 제곱수가 됨
+//	   int limit = 1000;
+//	   for(int i = 1; i <= limit; i++) {
+//		   if(n == (i*i)) {
+//			   answer = 1;
+//		   } else if (n != (i*i)) {
+//			   answer = 2;
+//		   }
+//	   }
+	   // 아마도 이 경우 answer가 그 뒤에 2가 될 수 있어서 오류가 발생한 듯 하다.
+	   // if 문에서 break 걸어주면 해결! ★★★ 
+	   
+	   // 내가 생각한 방법대로 풀이한 다른 분의 풀이
+//	   for(int i = 0; i <= 1000; i++) {
+//		   if(n == (i*i)) {
+//			   return 1;
+//		   }
+//	   }
+//	   return 2;
+	   return answer;
+   }
+   
+   
+   
+   // 세균 증식
+   // 1시간에 2배 증가하는 세균.
+   // 처음 세균의 마리 수 n, 경과 시간 t / n은 1이상 10이하, t는 1이상 15이하의 수
+   // 예) 7마리가 1시간 뒤엔 14마리, 2시간 뒤엔 28마리, ... 15시간 뒤 229,376마리가 됨
+   // t 시간 후 세균의 수 return
+   public int solution58(int n, int t) {
+	   int answer = n;
+	   for(int i = 1; i <= t; i++) {
+		   answer *= 2;
+	   }
+	   return answer;
+   }
+   
+   
+   
+   // 문자열 정렬하기 (2)
+   // 영어 대소문자로 이루어진 문자열 my_string
+   // my_string을 모두 소문자로 바꾸고 알파벳 순서대로 정렬해 return
+   public String solution59(String my_string) {
+	   String answer = "";
+	   // 아스키코드 이용하는 방법 : 대문자는 65 ~ 90 / 소문자는 97 ~ 122 즉, 대소문자는 32씩 차이남
+	   char[] array = my_string.toCharArray();
+	   for(int i = 0; i < array.length; i++) {
+		   if(array[i] >= 65 && array[i] <= 90) {
+			   array[i] += 32;
+		   }
+	   }
+	   Arrays.sort(array);
+	   for(int i = 0; i < array.length; i++) {
+		   answer += array[i];
+	   }
+	   return answer;
+   }
+   // 내가 푼 방법은 코드가 제법 길기도 하고, 시간이 너무 걸려서 다른 분들의 풀이를 참조했는데,
+   // 그냥 죄다 toLowerCase() 해버려도 되는 거였다...
+//   	char[] array = my_string.toLowerCase().toCharArray();
+//   	Arrays.sort(array);
+//   	return new String(array);
+   // 그나저나 이렇게 선언해서 바로 return 할 수도 있구나. 새로운 방법!
+   
 } // 클래스의 끝
 
 
