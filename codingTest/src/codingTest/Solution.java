@@ -1394,6 +1394,248 @@ public class Solution {
 //   	return new String(array);
    // 그나저나 이렇게 선언해서 바로 return 할 수도 있구나. 새로운 방법!
    
+   
+   // 7의 개수
+   // 정수배열 array에 7이 몇 개 들었는지 카운트해서 return
+   // 예) [7, 77, 17] -> 4 출력
+   public int solution60 (int[] array) {
+       int answer = 0;
+       // String으로 바꿔서 담은 다음, contains() 메서드를 이용해서 있으면 answer++ 되도록 하자.
+       String[] arr = new String[array.length];
+       for(int i = 0; i < array.length; i++){
+           arr[i] = array[i]+ "";
+       }
+//       for(int i = 0; i < arr.length; i++){
+//           if(arr[i].contains("7")){
+//               answer++; // 이렇게 했더니 그냥 7있으면 카운팅이라, 77은 카운팅이 안됨.
+//           }
+//           // 그럼 차라리 7 있을 때마다 카운팅해서, 그때마다 걔를 없애고 다음 7을 판단하는 건 어떨까? 
+//       }
+       for(int i = 0; i < arr.length; i++) {
+    	   String[] num = arr[i].split("");
+    	   for(int j = 0; j < num.length; j++) {
+    		   if(num[j].equals("7")) {
+    			   answer++;
+    		   }
+    	   }
+       }
+       return answer;       // 약 5-6ms 소요
+       // -> 왜 자꾸 이 방법을 생각하지 못할까? 그냥 위에서 고민했던 방법 --> 10 으로 나눠서 나머지가 7이면 answer++ 시키면 됐는데.
+       // 해당 방법 풀이
+//       for(int num : array) {
+//           while (num != 0) {
+//               if (num % 10 == 7) {
+//                   answer++;
+//               }
+//               num /= 10;
+//           }
+//       }
+//       return answer;
+   }
+   
+   
+   
+   // 잘라서 배열로 저장하기
+   // 문자열 my_str 과 n이 주어질 때, my_str을 길이 n씩 잘라서 저장한 배열 return
+   public String[] solution61(String my_str, int n) {
+	   // answer[0]은 my_str의 0-5, answer[1]은 my_str의 6-11, answer[2]은 my_str의 12-17...
+	   // 즉, i++ 일 때 [i*6]부터 6개 / i++ 일때 [i*3]부터 3개
+	   // 근데 my_str.length()/n+1은 테스트1처럼 길이가 n의 배수가 아닐 때나 적용가능함. -> 올림 메서드 사용! 
+	   // 반올림 : Math.round() - int / 올림 : Math.ceil() - double
+	   // ★ 문제 -> 이때 (int)Math.ceil(my_str.length()/n))을 했는데도 예시 1번의 경우 자꾸 배열의 크기가 2가 됨. 
+	   // -> 결국 원시적인 방법 사용
+       int index = 0;
+       if(my_str.length()%n == 0){
+           index = my_str.length()/n;
+       } else if (my_str.length()%n != 0){
+           index = my_str.length()/n+1;
+       }
+	   String[] answer = new String[index];
+	   for(int i = 0; i < answer.length; i++) {
+		   if ((i+1)*n <= my_str.length()) {
+			   answer[i] = my_str.substring((i*n),((i+1)*n));
+		   } else if ((i+1)*n > my_str.length()) {
+			   answer[i] = my_str.substring((i*n));
+		   }
+	   }
+	   return answer;
+   }
+   
+   
+   
+   // 직사각형 넓이 구하기
+   // 직사각형 네 꼭짓점의 좌표가 담긴 배열 dots / [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
+   // 직사각형의 넓이 return
+   public int solution62(int[][] dots) {
+	   int answer = 0;
+	   // 직사각형이니까 x값이 같은 애들은 각각 세로, y값이 같은 애들은 각각 가로임
+	   // 직사각형의 넓이 = 가로 길이 x 세로 길이
+	   int width = 0; // 가로
+	   int height = 0; // 세로
+	   for(int i = 0; i < dots.length; i++) {
+		   if(dots[0][1] == dots[i][1]) { // 가로 길이 = y값 같은 애들의 x값 차이
+			   width = Math.abs(dots[i][0]-dots[0][0]);
+		   }
+		   if(dots[0][0] == dots[i][0]) { // 세로 길이 = x값 같은 애들의 y값 차이
+			   height = Math.abs(dots[i][1]-dots[0][1]);
+		   }
+	   }
+	   answer = width*height;
+	   return answer;   
+   }
+   
+   
+   
+   // 캐릭터의 좌표
+   // 머쓱이는 RPG 게임중. UP, DOWN, LEFT, RIGHT -> 키 누르면 한 칸씩 그 방향으로 이동
+   // 즉, up : [0,1], down : [0,-1], left : [-1,0], right : [1,0]
+   // 머쓱이가 입력한 방향키의 배열 keyinput, 맵 크기 board
+   // 모든 입력이 끝난 뒤의 좌표 return
+   public int[] solution63(String[] keyinput, int[] board) {
+	   int[] answer = {0,0}; // 캐릭터는 [0, 0]에서 시작
+	   // keyinput에서 하나씩 빼서 up/down이면 answer[1]을 올리고/내리고, left/right면 answer[0]을 올리고/내리고
+	   // board의 크기도 고려해야 함. [0,0] 이 정 중앙 -> 최대 board[0]/2, board[1]/2 까지만 이동 가능.
+	   // 다른분 풀이 중 내가 생각한 방식과 가장 유사한 방법을 참고했는데, 알고보니 더 짧게 풀 수도 있었다. (아래 풀이 있음)
+	   for(int i = 0; i < keyinput.length; i++) {
+		   switch(keyinput[i]) {
+		   case "up" :
+			   answer[1]++;
+			   break;
+		   case "down" :
+			   answer[1]--;
+			   break;
+		   case "left" :
+			   answer[0]--;
+			   break;
+		   case "right" :
+			   answer[0]++;
+			   break;
+		   }
+		   if(Math.abs(answer[0]) > Math.abs(board[0]/2)) {
+			   if(answer[0] < 0) {
+				   answer[0]++;
+			   } else {
+				   answer[0]--;
+			   }
+		   } else if (Math.abs(answer[1]) > Math.abs(board[1]/2)) {
+			   if(answer[1] < 0) {
+				   answer[1]++;
+			   } else {
+				   answer[1]--;
+			   }
+		   }
+	   } // for 끝
+	   return answer;
+	   
+	   // 다른 분의 풀이 -> 애초에 if문으로 비교할 때 크기 비교도 하면 되는거였음!
+//       int[] answer = {0, 0};
+//      int width = board[0]/2;
+//      int height = board[1]/2;
+//      for(String input: keyinput) {
+//          if(input.equals("up") &&  answer[1] < height) {
+//              answer[1]++;
+//          } else if (input.equals("down") && answer[1] > -height) {
+//              answer[1]--;
+//          }else if (input.equals("left") && answer[0] > -width) {
+//              answer[0]--;
+//          }else if (input.equals("right") && answer[0] < width) {
+//              answer[0]++;
+//          }
+//      }
+//
+//      return answer;
+   }
+   
+   
+   
+   // 최댓값 만들기 (2)
+   // 정수 배열 numbers > 원소 중 두개를 곱해 만들 수 있는 최댓값 return
+   // 예) [1,2,-3,4,-5] -> 15 
+   public int solution64(int[] numbers) {
+	   int answer = 0;
+	   // 구글링해보니 훨씬 간단한 방법이 있었다. 그분의 풀이를 참조해서 푼 풀이!
+       Arrays.sort(numbers);
+       // 각각 음수 제일 작은거 2개, 양수 제일 큰거 2개 곱해보고 그 중 큰 값 return!
+       int posMax = numbers[numbers.length-1]*numbers[numbers.length-2];
+       int negMax = numbers[0]*numbers[1];
+       if(posMax > negMax){
+           answer = posMax;
+       } else {
+           answer = negMax;
+       }
+	   return answer;
+	   
+	   // 솔루션 1 : 무식하게 쭉쭉 써서 풀었는데 테스트케이스 7번에서 통과X. 알고보니, 모든 원소의 곱이 음수일 때
+	   // 내 케이스의 경우 positive, negative에 0도 들어가 있어서 0이 제일 큰게 되기 때문이었다. 헝.....
+//       int answer = 0;
+//       int[] positive = new int[numbers.length];
+//       int[] negative = new int[numbers.length];
+//       // 양수끼리 곱하거나, 음수끼리 곱하게 해야함.
+//       for(int i = 0; i < numbers.length; i++){
+//           if(numbers[i] >= 0){
+//               positive[i] = numbers[i];
+//           } else if (numbers[i] < 0){
+//               negative[i] = numbers[i];
+//           }
+//       }
+//       Arrays.sort(positive);
+//       Arrays.sort(negative);
+//       int posMax = positive[positive.length-2]*positive[positive.length-1];
+//       int negMax = negative[0]*negative[1];
+//       if (posMax >= negMax){
+//           answer = posMax;
+//       } else if (posMax < negMax) {
+//           answer = negMax;
+//       }
+//
+//       return answer;
+   }
+   
+   
+   
+   // 다항식 더하기
+   // 다항식 : 한 개 이상의 합으로 이루어진 식 -> 동류항끼리 계산해 정리
+   // 덧셈으로 이루어진 다항식 polynomial (문자열)
+   // 예) 3x + 7 + x = 4x + 7 , x + x + x = 3x
+   // 동류항끼리 더한 값을 return
+   public String solution65(String polynomial) {
+	   // 솔루션 1 : 이렇게 했더니 테스트케이스는 통과하는데, 채점 시 3번 케이스 빼고 전부 실패...
+	   // 게다가 시간도 너무 오래 걸린다. 
+	   // 질문게시판을 보니 계수가 두 자리 수 이상일 경우를 고려하지 않아서 생긴 오류인듯. charAt() 말고 subString() 사용!
+	   // 계속 틀린 테스트케이스 생겨서 봤더니 x가 없을 경우도 고려해야 한다고 함.
+	   String answer = "";
+	   String[] arr = polynomial.split(" ");
+	   int cnt = 0; // x
+	   int sum = 0; // 상수 합
+	   for(int i = 0; i < arr.length; i++) {
+		   if(arr[i].contains("x") && !arr[i].equals("x")) {
+			   cnt += Integer.valueOf(arr[i].substring(0, arr[i].length()-1));
+		   } else if (arr[i].contains("x") && arr[i].equals("x")) {
+			   cnt++;
+		   } else if (!arr[i].equals("+")) { // 즉, 상수라면
+			   sum += Integer.valueOf(arr[i]);
+		   }
+	   }
+	   if(!polynomial.contains("x")) {
+		   answer = sum + "";
+	   } else {
+		   if (sum != 0) {
+			   if (cnt == 1) {
+				   answer = "x + " + sum;
+			   } else {
+				   answer = cnt + "x + " + sum;
+			   }
+		   } else {
+			   if (cnt == 1) {
+				   answer = "x";
+			   } else {
+				   answer = cnt + "x";
+			   }
+		   }   
+	   }
+	   return answer;
+   }
+   
 } // 클래스의 끝
 
 
