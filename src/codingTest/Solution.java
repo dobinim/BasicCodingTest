@@ -1940,6 +1940,186 @@ public class Solution {
        // String strSum2 = strB + strA;
        // return Math.max(Integer.valueOf(strSum1), Integer.valueOf(strSum2));
    }
+   
+   
+   
+   // 공배수
+   // 정수 number, n, m
+   // number가 n과 m의 배수라면 1을, 아니면 0을 return
+   public int solution83(int number, int n, int m) {
+       int answer = 0;
+       answer = number % n == 0 && number % m == 0 ? 1 : 0;
+       return answer;
+   }
+   
+   
+   
+   // 홀짝에 따라 다른 값 반환하기
+   // 양의 정수 n이 홀수일 경우 n이하 홀수인 모든 양의 정수의 합 return
+   // 양의 정수 n이 짝수일 경우 n이하 짝수인 모든 양의 정수의 제곱의 합 return
+   public int solution84(int n) {
+	   // 내가 처음에 접근한 방법인데 이렇게 어렵게 접근할 필요가 없었음!
+//	   int answer = 0;
+//       // n%2 == 1 -> n 이하 모든 홀수의 합
+//       // n%2 == 0 -> n 이하 모든 짝수의 제곱의 합
+//       int[] oddArr = new int[n/2+1];
+//       int[] evenArr = new int[n/2+1];
+//       if(n%2 == 1){
+//           for(int i = 0; i <= n/2; i++){
+//               oddArr[i] = 1 + (i*2);
+//               answer += oddArr[i];
+//           }
+//       } else if (n%2 == 0){
+//           for(int i = 0; i <= n/2; i++){
+//               evenArr[i] = i*2;
+//               answer += evenArr[i]*evenArr[i];
+//           }
+//       }
+//       return answer;
+       int answer = 0;
+       if(n%2 == 1){
+           for(int i = 1; i <= n; i+= 2){
+               answer += i;
+           }
+       } else if (n%2 == 0){
+           for(int i = 0; i <= n; i+= 2){
+               answer += i*i;
+           }
+       }
+       return answer;
+   }
+   
+   
+   
+   // 조건 문자열
+   // ineq는 > 또는 < , eq는 = 또는 !
+   // n과 m이 ineq와 eq의 조건에 맞으면 1, 아니면 0 return
+   public int solution85(String ineq, String eq, int n, int m) {
+       int answer = 0;
+       // 만약 eq = !라면 그냥 무시하고 진행하면 됨
+       String simbol = "";
+       simbol = eq.equals("!") ? ineq : ineq + eq; // 사실 이 부분 없어도 되지만 그럼녀 시간이 더 오래 걸림! (기호를 if문마다 check 해야하므로)
+       if((n > m) && simbol.contains(">")){
+           answer = 1;
+       } else if ((n < m) && simbol.contains("<")){
+           answer = 1;
+       } else if ((n == m) && simbol.contains("=")) {
+           answer = 1;
+       } else {
+           answer = 0;
+       }
+       return answer;
+   }
+   
+   
+   
+   // flag에 따라 다른 값 변환하기
+   // 두 정수 a,b 와 boolean인 flag
+   // flag가 true면 a+b, 아니면 a-b 를 return
+   public int solution86(int a, int b, boolean flag) {
+       int answer = 0;
+       answer = flag == true ? a + b : a - b;
+       return answer;
+   }
+   
+   
+   
+   // 코드 처리하기
+   // 문자열 code -> 앞에서부터 읽으면서 문자가 1이면 mode 바꾸기
+   // mode에 따라 code를 읽어가며 만든 문자열 ret을 return 
+   // mode는 0과 1 -> idx를 1씩 키워가며 code[idx]의 값에 따라 행동
+   public String solution87(String code) {
+	   // 풀이법 1번 
+       String ret = "";
+       String[] codeArr = code.split(""); // split("") 
+       int mode = 0;
+       for(int idx = 0; idx < codeArr.length; idx++){
+           if(mode == 0){
+               if(codeArr[idx].equals("1")){
+                   mode = 1;
+               } else {
+                   if(idx%2 == 0){
+                       ret += codeArr[idx];
+                   }
+               }
+           } else if (mode == 1) {
+               if(codeArr[idx].equals("1")){
+                   mode = 0;
+               } else {
+                   if(idx%2 == 1){
+                       ret += codeArr[idx];
+                   }
+               }
+           }
+       }
+       ret = ret.equals("")? ret + "EMPTY" : ret;
+       return ret;
+	   
+	   // 풀이법 2번 
+//	   String ret = "";
+//	   int mode = 0;
+//	   for(int idx = 0; idx < code.length(); idx++) {
+//		   if(code.charAt(idx) == '1') {
+//			   mode = 1 - mode; // 1을 만나면 mode가 변경
+//		   } else {
+//			   if(mode == 0 && idx%2 == 0) {
+//				   ret += code.charAt(idx);
+//			   } else if (mode == 1 && idx%2 == 1) {
+//				   ret += code.charAt(idx);
+//			   }
+//		   }
+//	   }
+//	   return ret.equals("") ? "EMPTY" : ret;
+   }
+   
+   
+   
+   // 등차수열의 특정한 항만 더하기
+   // 두 정수 a, d와 길이가 n인 boolean인 배열 included
+   // 첫째항이 a, 공차가 d인 등차수열에서 included가 true인 항들만 더한 값을 return
+   public int solution88(int a, int d, boolean[] included) {
+       int answer = 0;
+       for(int i = 0; i < included.length; i++){
+           if(included[i]){
+               answer += a + i*d;
+           }
+       }
+       return answer;
+   }
+   
+   
+   
+   // 주사위 게임 2
+   // 1-6까지 적힌 주사위 3개, 각각 굴려 나온 숫자 a,b,c
+   // 세 숫자가 다 다르면 a+b+c, 둘은 같고 하나는 다르면 (a+b+c)*(a^2+b^2+c^2)
+   // 세 숫자가 모두 같으면 (a+b+c)*(a^2+b^2+c^2)*(a^3+b^3+c^3) return
+   public int solution89(int a, int b, int c) {
+       int answer = 0;
+       int num1 = a + b + c;
+       int num2 = a*a + b*b + c*c;
+       int num3 = a*a*a + b*b*b + c*c*c;
+       if(a == b && b == c){
+           answer = num1*num2*num3;
+       } else if (a != b && a != c && b != c){
+           answer = num1;
+       } else {
+           answer = num1*num2;
+       }
+       return answer;
+   }
+   
+   
+   
+   // 원소들의 곱과 합
+   public int solution90(int[] num_list) {
+       int sum = 0; 
+       int multiple = 1;
+       for(int num : num_list){
+           sum += num;
+           multiple *= num;
+       }
+       return multiple < sum*sum ? 1 : 0;
+   }
 } // 클래스의 끝
 
 
