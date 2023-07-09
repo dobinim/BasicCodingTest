@@ -2120,6 +2120,452 @@ public class Solution {
        }
        return multiple < sum*sum ? 1 : 0;
    }
+   
+   
+   
+   // 이어 붙인 수
+   // 정수가 담긴 리스트 num_list 의 홀수만 이어붙인 수와 짝수만 이어붙인 수의 합을 return
+   public int solution91(int[] num_list) {
+       int answer = 0;
+       String even = "";
+       String odd = "";
+       for (int num : num_list){
+           if(num%2 == 0){
+               even += Integer.toString(num); // 바로 String으로 바꿔주는 toString을 활용하자
+           } else {
+               odd += Integer.toString(num);
+           }
+       }
+       // 이게 시간이 오래 걸리는 이유 : num2, num3가 계속해서 생성되어 처리되기 때문
+       // for(int num : num_list){
+       //     if(num%2 == 0){
+       //         String num2 = num + "";
+       //         even += num2;
+       //     } else {
+       //         String num3 = num + "";
+       //         odd += num3;
+       //     }
+       // }
+       answer = Integer.parseInt(even) + Integer.parseInt(odd);
+       return answer;
+   }
+   
+   
+   
+   // 마지막 두 원소
+   // 정수 리스트 num_list가 주어질 때, 마지막 원소가 그 전 원소보다 크면 마지막 원소 - 그 전 원소 값을 
+   // 마지막 원소가 그 전 원소보다 작으면 마지막 원소*2한 값을 추가해 return
+   public int[] solution92(int[] num_list) {
+       int[] answer = new int[num_list.length+1];
+       int length = num_list.length;
+       for(int i = 0; i < length; i++){
+           answer[i] = num_list[i];
+       }
+       answer[length] = num_list[length-1] > num_list[length-2] ? num_list[length-1] - num_list[length-2] : num_list[length-1]*2;
+       // if(num_list[length-1] > num_list[length-2]){
+       //     answer[length] = num_list[length-1] - num_list[length-2];
+       // } else {
+       //     answer[length] = num_list[length-1]*2;
+       // }
+       return answer;
+   }
+   
+   
+   
+   // 수 조작하기 1
+   // 정수 n과 문자열 control -> control은 "w", "s", "d", "a" 로 이루어져 있음
+   // control 순서대로 n의 값을 바꿈 (n+1, n-1, n+10, n-10)
+   public int solution93(int n, String control) {
+       for(int i = 0; i < control.length(); i++){
+           // 풀이법 2 : switch ~ case 를 이용한 방법
+           switch(control.charAt(i)){
+               case 'w' : n++; // 해당 조건값 : 실행식 break;
+                   break;
+               case 's' : n--;
+                   break;
+               case 'd' : n += 10;
+                   break;
+               default : n-= 10; // 조건에 아무것도 해당하지 않을 때 실행
+                   break;
+                   
+           }
+           
+           // 풀이법 1 : if 문을 활용한 방법
+           // if(control.charAt(i) == 'w'){
+           //     n++;
+           // } else if (control.charAt(i) == 's') {
+           //     n--;
+           // } else if (control.charAt(i) == 'd') {
+           //     n = n+10;
+           // } else {
+           //     n = n-10;
+           // }
+       }
+       return n;
+   }
+   
+   
+   
+   // 수 조작하기 2
+   // 정수 배열 numLog 
+   // "w", "s", "d", "a"를 입력받아 순서대로 조작 (+1, -1, +10, -10)해 그 값을 기록한 배열
+   // 즉, numLog[i]는 numLog[0]으로부터 총 i번 조작을 가한 결과값
+   // numLog에 대해 조작을 위해 입력받은 문자열을 return
+   public String solution94(int[] numLog) {
+       String answer = "";
+       // String은 덧셈연산이 되면 처리시간이 길어진다! Stringbuilder를 사용해보자
+       StringBuilder str = new StringBuilder();
+       for(int i = 1; i < numLog.length; i++){
+           switch (numLog[i] - numLog[i-1]) {
+               case 1 : str.append("w"); // answer += "w";
+                   break;
+               case -1 : str.append("s"); // answer += "s";
+                   break;
+               case 10 : str.append("d"); // answer += "d";
+                   break;
+               default : str.append("a"); // answer += "a";
+                   break;
+           }
+       }
+//        int[] diff = new int[numLog.length-1];
+//        for(int i = 0; i < diff.length; i++){
+//            diff[i] = numLog[i+1]-numLog[i];
+//        }
+//        for(int num : diff){
+//            switch(num){
+//                case 1 : answer += "w";
+//                    break;
+//                case -1 : answer += "s";
+//                    break;
+//                case 10 : answer += "d";
+//                    break;
+//                default : answer += "a";
+//                    break;
+                   
+//            }
+//        }
+       answer = str.toString();
+       return answer;
+   }
+   
+   
+   
+   // 수열과 구간 쿼리 3
+   // 정수 배열 arr, 2차원 정수 배열 queries
+   // queries의 원소는 각 하나의 query이며, [i, j] 꼴
+   // query마다 순서대로 arr[i]와 arr[j]의 값을 서로 교환 -> 해당 규칙에 따라 queries 를 처리한 뒤의 arr을 return
+   public int[] solution95(int[]arr, int[][] queries) {
+       // int[] answer = new int[arr.length];
+       // queries 의 query -> [0,3]의 경우 arr[0]과 arr[3]을 서로 바꿔주란 소리
+       for(int[] query : queries){
+           int num = arr[query[0]];
+           arr[query[0]] = arr[query[1]];
+           arr[query[1]] = num;
+       }
+       return arr;
+   }
+   
+   
+   
+   // 수열과 구간 쿼리 2
+   // 정수 배열 arr, 2차원 정수 배열 queries
+   // 각 query마다 순서대로 s <= i <= e인 모든 i에 대해 k보다 크며 가장 작은 arr[i] 찾기
+   // 각 쿼리의 순서에 맞게 답을 저장한 배열 return
+   public int[] solution96(int[] arr, int[][] queries) {
+       int[] answer = new int[queries.length];
+       Arrays.fill(answer, -1);
+       for(int i = 0; i < queries.length; i++){
+           for(int j = queries[i][0]; j <= queries[i][1]; j++){
+               if(arr[j] > queries[i][2]){
+                   if(answer[i] == -1 || answer[i] > arr[j]){ 
+                       answer[i] = arr[j];
+                       // 조건 1 : 맨 처음에 채웠던 값 (-1) 이 들어가 있거나
+                       // 조건 2 : 기존에 있는 값이 비교하는 값보다 크다면
+                       // 비교값을 넣어준다.
+                       
+                      // 문제 이해에 주의
+                      // query[0] ~ query[1] 안의 값을 인덱스로 가진 arr들 중
+                      // query[2] 보다 큰 애 중 가장 작은 애를 가져오는 거였음!
+                   }
+               }
+           }
+       }
+       return answer;
+   }
+   
+   
+   
+   // 수열과 구간 쿼리 4
+   // 정수 배열 arr, 2차원 정수 배열 queries
+   // 각 query는 [s, e, k] 꼴
+   // 각 query마다 순서대로 s <= i <= e 인 모든 i에 대해 i가 k의 배수면 arr[i]에 1 더하기
+   // 해당 규칙에 따라 처리한 배열 arr을 return
+   public int[] solution97(int[] arr, int[][] queries) {
+       for(int i = 0; i < queries.length; i++){
+           int s = queries[i][0];
+           int e = queries[i][1];
+           int k = queries[i][2];
+           for(int j = s; j <= e; j++){
+               if(j%k == 0){
+                   arr[j] += 1;
+               }
+           }
+       }
+       return arr;
+   }
+   
+   
+   
+   // 배열 만들기 2
+   // 정수 l과 r이 주어졌을 때, l ~ r 사이에서 숫자 "0" 과 "5"로만 이루어진 모든 정수를 오름차순으로 저장한 배열 return
+   // 만약 없다면, -1이 담긴 배열 return
+   public int[] solution98(int l, int r) {
+       ArrayList<Integer> list = new ArrayList<>();
+       String str = "";
+       for(int i = l; i <= r; i++){
+           str = String.valueOf(i);
+           String word = str.replace("5", "").replace("0", "");
+           if(word.equals("")){
+               list.add(i);
+           }
+       }
+       int[] answer = new int[list.size()];
+       int[] ans = {-1};
+       if(answer.length == 0){
+           return ans;
+       } else {
+           for(int j = 0; j < answer.length; j++){
+               answer[j] = list.get(j);
+           }
+           return answer;
+       }
+   }
+   
+   
+   
+   // 카운트 업
+   // 정수 start와 end가 주어질 때, start - end 까지의 숫자를 담은 리스트 return
+   public int[] solution99(int start, int end) {
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = start; i <= end; i++){
+           list.add(i);
+       }
+       int[] answer = new int[list.size()];
+       for(int j = 0; j < list.size(); j++){
+           answer[j] = list.get(j);
+       }
+//       int[] answer = list.stream().mapToInt(Integer::intValue).toArray();
+       // list.stream() : int값을 꺼내어 배열로 저장하기 위해 stream 이용
+       // Stream<Integer> 형으로 반환됨
+       // mapToInt(Integer::intValue) : Integer의 intValue()를 이용해 int로 변환
+       // toArray() : 해당 원소를 배열로 반환
+       
+       
+       // 풀이법 2 : 그냥 쉽게 start ~ end 사이의 모든 정수 반환이므로
+       // int[] answer = new int[end - start + 1];
+       // for (int i = 0; i < answer.length; i++) {
+       // answer[i] = start;
+       // start++;
+       // }
+       return answer;
+   }
+   
+   
+   
+   // 콜라츠 수열 만들기
+   public int[] solution100(int n) {
+       ArrayList<Integer> list = new ArrayList<>();
+       list.add(n);
+       while(n != 1){
+           if(n%2 == 0){
+               n = n/2;
+               list.add(n);
+           } else {
+               n = n*3 + 1;
+               list.add(n);
+           }
+       }
+       int[] answer = new int[list.size()];
+       for(int i = 0; i < list.size(); i++){
+           answer[i] = list.get(i);
+       }
+       return answer;
+   }
+   
+   
+   
+   // 간단한 논리 연산
+   public boolean solution101(boolean x1, boolean x2, boolean x3, boolean x4) {
+       boolean answer = true;
+       boolean b1 = (x1 == x2 && x1 == false) ? false : true;
+       boolean b2 = (x3 == x4 && x3 == false) ? false : true;
+       answer = (b1 == b2 && b1 == true) ? true : false;
+       return answer;
+       
+       // 풀이법 2 : 더 쉽게 하는 법
+       // boolean을 이용한다 = if 문 등이 훨씬 쉬워진다!
+       // x 또는 y 둘 중 하나가 T면 (x||y) 하나라도 만족하는 것이므로 T가 되고
+       // 둘 다 만족하지 않으면 F가 된다. (if문에서 ||로 조건 만족할 때를 생각)
+       // 고로 b1 = (x1||x2) , b2 = (x3||x4)
+       // 둘 다 T라면 T가 되고, 둘 중 하나라도 F면 F가 된다.
+       // (if문에서 &&로 조건 만족할 때 생각)
+       // b1 && b2 -> 즉, (x1||x2)&&(x3||x4) 
+       
+       // return (x1||x2)&&(x3||x4);
+       
+       
+       // 논리합, 논리곱 개념을 이해하자!
+       // x ∨ y → 논리합 (||) 둘 중 하나라도 T면 T
+       // x ∧ y → 논리곱 (&&) 둘 다 T여야지만 T
+   }
+   
+   
+   
+   // 배열 만들기 4
+   public int[] solution102(int[] arr) {
+       ArrayList<Integer> list = new ArrayList<>();
+       int i = 0;
+       while(i < arr.length){
+           if(list.size() == 0 || list.get(list.size()-1) < arr[i]){
+               list.add(arr[i]);
+               i++;
+               continue;
+           } else if (list.get(list.size()-1) >= arr[i]){
+               list.remove(list.size()-1);
+               continue;
+           }
+       }
+       // 풀이법 2 : 실행은 되는데, 테스트케이스 전부 실패 → 찾아보니 i가 실제로는 더 돌아가야 한다고 함! 
+       // ArrayList<Integer> list = new ArrayList<>();
+       // for(int i = 1; i < arr.length; i++){
+       //     if(arr[i] > arr[i-1]){
+       //         list.add(arr[i-1]);
+       //     } else if (i == arr.length-1) {
+       //         list.add(arr[i]);
+       //     }
+       // }
+       // int[] stk = new int[list.size()];
+       // for(int i = 0; i < stk.length; i++){
+       //     stk[i] = list.get(i);
+       // }
+       
+       // 풀이법 1: 왜 안될까
+//        ArrayList<Integer> list = new ArrayList<>();
+//        for(int i = 0; i < arr.length; i++){
+//            if(list.size() == 0 || list.get(i) < arr[i]){
+//                list.add(arr[i]);
+//            } else if (list.get(i) >= arr[i]) {
+//                list.remove(list.get(i));
+//            }
+//        }
+       
+//        int[] stk = new int[list.size()];
+//        for(int i = 0; i < stk.length; i++){
+//            stk[i] = list.get(i);
+//        }
+       int[] stk = new int[list.size()];
+       for(int j = 0; j < stk.length; j++){
+           stk[j] = list.get(j);
+       }
+       return stk;
+   }
+   
+   
+   
+   // 주사위 게임 3
+   public int solution103(int a, int b, int c, int d) {
+       int answer = 0;    
+       // a, b, c, d가 모두 같으면 1111*a
+       if(a == b && a == c && a == d){
+           answer = 1111*a;
+       } 
+       // 3개가 같고 1개가 다른 경우 -> (a,b,c), (a,b,d), (a,c,d), (b,c,d)
+       else if (a == b && a == c && a != d) {
+           answer = (int)Math.pow(10*a+d, 2);
+       } else if (a == b && a == d && a != c) {
+           answer = (int)Math.pow(10*a+c, 2);
+       } else if (a == c && a == d && a != b) {
+           answer = (int)Math.pow(10*a+b, 2);
+       } else if (b == c && b == d && b != a) {
+           answer = (int)Math.pow(10*b+a, 2);
+       }
+       // 2개씩 같고 그 값이 서로 다른 경우 -> (ab,cd), (ac,bd), (ad,bc)
+       else if (a == b && c == d && a != c) {
+           answer = (a + c)*Math.abs(a-c);
+       } else if (a == c && b == d && a != b) {
+           answer = (a + b)*Math.abs(a-b);
+       } else if (a == d && b == c && a != b) {
+           answer = (a + b)*Math.abs(a-b);
+       }
+       // 2개는 같고 2개는 다른 경우 -> (ab, c, d), (ac, b, d), (ad, b, c), (bc, a, d), (bd, a, c), (cd, a, b)
+       else if (a == b && c != d) {
+           answer = c*d;
+       } else if (a == c && b != d) {
+           answer = b*d;
+       } else if (a == d && b != c) {
+           answer = b*c;
+       } else if (b == c && a != d) {
+           answer = a*d;
+       } else if (b == d && a != c) {
+           answer = a*c;
+       } else if (c == d && a != b) {
+           answer = a*b;
+       }
+       // 모두 다른 경우 -> 가장 작은 숫자
+       else {
+           int min = 6;
+           if(min > a){
+               min = a;
+           } 
+           if (min > b) {
+               min = b;
+           }
+           if (min > c) {
+               min = c;
+           }
+           if (min > d) {
+               min = d;
+           }
+           answer = min;
+       }
+       return answer;
+       
+       /* 다른 분의 풀이! 이렇게 하면 훨씬 간단하게 풀 수 있었다 :) 보고 이해하기 */
+//        int[] dice = {a, b, c, d};
+//        Arrays.sort(dice);
+
+//        int ans = 0;
+
+//        if (dice[0] == dice[3]) {
+//            ans = 1111 * dice[3];
+//        } else if (dice[0] == dice[2] || dice[1] == dice[3]) {
+//            ans = (int) Math.pow(dice[1] * 10 + (dice[0] + dice[3] - dice[1]), 2);
+//        } else if (dice[0] == dice[1] && dice[2] == dice[3]) {
+//            ans = (dice[0] + dice[3]) * (dice[3] - dice[0]);
+//        } else if (dice[0] == dice[1]) {
+//            ans = dice[2] * dice[3];
+//        } else if (dice[1] == dice[2]) {
+//            ans = dice[0] * dice[3];
+//        } else if (dice[2] == dice[3]) {
+//            ans = dice[0] * dice[1];
+//        } else {
+//            ans = dice[0];
+//        }
+
+//        return ans;
+   }
+   
+   
+   
+   // 글자 이어 붙여 문자열 만들기
+   public String solution104(String my_string, int[] index_list) {
+       StringBuffer sb = new StringBuffer();
+       for(int index : index_list){
+           sb.append(my_string.charAt(index)); 
+           // StringBuffer는 += 가 아니라 append()임을 명심하자!
+       }
+       return sb.toString();
+   }
 } // 클래스의 끝
 
 
