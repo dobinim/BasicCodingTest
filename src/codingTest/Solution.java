@@ -2566,6 +2566,160 @@ public class Solution {
        }
        return sb.toString();
    }
+   
+   
+   // 9로 나눈 나머지
+   public int solution105(String number) {
+       int answer = 0;
+       int sum = 0;
+       for(int i = 0; i < number.length(); i++){
+           char ch = number.charAt(i);
+           sum += Integer.parseInt(String.valueOf(ch));
+           // 이럴 필요 없이 간단하게
+           // 문자 '0'이 48임을 이용해서 풀었어도 됨!
+           // sum += number.charAt(i) - '0';
+           // charAt(i) - '0' : charAt(i) 하면 해당 글자에 맞는 정수값으로 나오게 됨, 이때 아스키코드로 48의 값을 갖는 문자형 '0'을 빼주어서 그 숫자가 그대로 나오게 하는 것! (숫자는 아스키코드로 1 이 49임)
+       }
+       return sum%9;
+   }
+   
+   
+   
+   // 문자열 여러번 뒤집기
+   public String solution106(String my_string, int[][] queries) {
+       String answer = "";
+       StringBuffer anstemp = new StringBuffer(my_string);
+       for(int[] query : queries){
+           StringBuffer temp1 = new StringBuffer(anstemp.substring(0, query[0]));
+           StringBuffer sb = new StringBuffer(anstemp.substring(query[0], query[1]+1));
+           sb.reverse(); // 뒤집어야 할 문자열들 뒤집어서 저장
+           StringBuffer temp2 = new StringBuffer(anstemp.substring(query[1]+1));
+           anstemp = temp1.append(sb).append(temp2);
+       }
+       answer = anstemp.toString();
+       return answer;
+   }
+   
+   
+   
+   // 배열 만들기 5
+   public int[] solution107(String[] intStrs, int k, int s, int l) {
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = 0; i < intStrs.length; i++){
+           int temp = Integer.parseInt(intStrs[i].substring(s, s+l));
+           if(temp > k){
+               list.add(temp);
+           }
+       }
+       int[] answer = new int[list.size()];
+       for(int j = 0; j < list.size(); j++){
+           answer[j] = list.get(j);
+       }
+       return answer;
+   }
+   
+   
+   
+   // 부분 문자열 이어 붙여 문자열 만들기
+   public String solution108(String[] my_strings, int[][] parts) {
+       StringBuffer answer = new StringBuffer();
+       for(int i = 0; i < my_strings.length; i++){
+           answer.append(my_strings[i].substring(parts[i][0], parts[i][1] + 1));
+       }
+       return answer.toString();
+       // String answer = "";
+       // for(int i = 0; i < my_strings.length; i++){
+       //     String temp = my_strings[i].substring(parts[i][0], parts[i][1]+1);
+       //     answer += temp;
+       // }
+       // return answer;
+   }
+   
+   
+   
+   // 문자열의 뒤의 n글자
+   public String solution109(String my_string, int n) {        
+       // 배열 이용한 풀이
+       // char[] arr = my_string.toCharArray();
+       // for(int i = arr.length-n; i < arr.length; i++){
+       //     answer.append(arr[i]);
+       // }
+       return my_string.substring(my_string.length()-n);
+   }
+   
+   
+  
+   // 접미사 배열
+   public String[] solution110(String my_string) {
+       String[] answer = new String[my_string.length()];
+       for(int i = 0; i < my_string.length(); i++){
+           answer[i] = my_string.substring(i);
+       }
+       Arrays.sort(answer);
+       // 처음 했던 풀이 -> 알고보니 Arrays.sort()하면 문자도 사전순으로 정렬됨!
+       // ArrayList<String> list = new ArrayList<>();
+       // for(int i = 0; i < my_string.length(); i++){
+       //     list.add(my_string.substring(i));
+       // }
+       // Collections.sort(list);
+       // String[] answer = list.toArray(new String[list.size()]);
+
+       return answer;
+   }
+   
+   
+   
+   // 접미사인지 확인하기
+   public int solution111(String my_string, String is_suffix) {
+       int answer = 0;
+       String[] arr = new String[my_string.length()];
+       for(int i = 0; i < arr.length; i++){
+           arr[i] = my_string.substring(i);
+           if(arr[i].equals(is_suffix)){
+               answer = 1;
+               break;
+           } else {
+               answer = 0;
+           }
+       }
+       return answer;
+       // String.endsWith() -> 특정 문자로 끝나는지 체크할 수 있는 메서드
+       // String.startsWith() -> 특정 문자로 시작하는지 체크할 수 있는 메서드
+       // return my_string.endsWith(is_suffix) ? 1 : 0;
+   }
+   
+   
+   
+   // 문자열의 앞의 n 글자
+   public String solution112(String my_string, int n) {
+       String answer = my_string.substring(0, n);
+       return answer;
+   }
+   
+   
+   
+   // 접두사인지 확인하기
+   public int solution113(String my_string, String is_prefix) {
+       return my_string.startsWith(is_prefix) ? 1 : 0;
+   }
+   
+   
+   
+   // 문자열 뒤집기
+   public String solution114(String my_string, int s, int e) {
+        String answer = "";
+        String temp1 = my_string.substring(0, s);
+        String temp2 = my_string.substring(e+1);
+        StringBuffer sb = new StringBuffer(my_string.substring(s, e+1));
+        String reversed = sb.reverse().toString();
+        answer = temp1 + reversed + temp2;
+        return answer;
+       
+       // * 다른 분의 풀이 참조 -> 더 간단하게 쓴다면
+       // answer 자체를 StringBuffer로 선언해서 써보기
+//       StringBuilder sb = new StringBuilder(my_string.substring(s, e+1));
+//       return my_string.substring(0,s) + sb.reverse().toString() + my_string.substring(e+1);
+   }
 } // 클래스의 끝
 
 
