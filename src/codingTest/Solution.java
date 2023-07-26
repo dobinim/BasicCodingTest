@@ -2720,6 +2720,121 @@ public class Solution {
 //       StringBuilder sb = new StringBuilder(my_string.substring(s, e+1));
 //       return my_string.substring(0,s) + sb.reverse().toString() + my_string.substring(e+1);
    }
+   
+   
+   
+   // 세로 읽기
+   public String solution115(String my_string, int m, int c) {
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0; i < my_string.length()/m; i++){
+           sb.append(my_string.charAt(i*m+c-1));
+       }
+       return sb.toString();
+       
+       // String answer = "";
+       // for(int i = 0; i < my_string.length()/m; i++){
+       //     answer += my_string.charAt(i*m+c-1);
+       // }
+       // return answer;
+   }
+   
+   
+   
+   // qr code
+   public String solution116(int q, int r, String code) {
+       // String answer = "";
+       // for(int i = 0; i < code.length(); i++){
+       //     if(i%q == r){
+       //         answer += code.charAt(i);
+       //     }
+       // }
+       // return answer;
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0; i < code.length(); i++){
+           if(i%q == r){
+               sb.append(code.charAt(i));
+           }
+       }
+       return sb.toString();
+   }
+   
+   
+   
+   // 문자 개수 세기
+   public int[] solution117(String my_string) {
+       int[] answer = new int[52];
+       // 해당 아스키코드가 있으면 해당 카운트가 증가하게 만들자
+       // 대문자 : 65-90 / 소문자 : 97 - 122
+       for(int i = 0; i < my_string.length(); i++){
+           if(my_string.charAt(i) >= 65 && my_string.charAt(i) <= 90){ // 대문자의 경우
+               answer[my_string.charAt(i) - 65]++;
+           } else if (my_string.charAt(i) >= 97 && my_string.charAt(i) <= 122) { // 소문자의 경우
+               answer[my_string.charAt(i) - 71]++; 
+               // WHY 71? 
+               // -> 97 (A)의 경우 answer[26]에 카운팅 되어야하므로 72 (65+7) 가 아닌 71!
+           } 
+       }
+       return answer;
+   }
+   
+   
+   
+   // 배열 만들기 1
+   public int[] solution118(int n, int k) {
+       // 내 풀이
+       // 내가 너무 어렵게 생각했음! 다른 분의 풀이를 참조해서 더 쉬운 방법으로 해결
+       // ArrayList<Integer> list = new ArrayList<>();
+       // for(int i = 1; i <= n; i++){
+       //     if(i%k == 0){
+       //         list.add(i);
+       //     }
+       // }
+       // int[] answer = new int[list.size()];
+       // for(int j = 0; j < answer.length; j++){
+       //     answer[j] = list.get(j);
+       // }
+       // return answer;
+       
+       // 다른 분의 풀이
+       int[] answer = new int[n/k];
+       for(int i = 1; i <= n/k; i++){
+           answer[i-1] = i*k;
+       }
+       return answer;
+   }
+   
+   
+   
+   // 글자 지우기
+   public String solution119(String my_string, int[] indices) {   
+       Arrays.sort(indices);
+       StringBuilder sb = new StringBuilder(my_string);
+       for(int i : indices){
+           sb.replace(i, i+1, "0");
+       }
+       
+       String answer = sb.toString();
+
+       // 실행 결과 : pororapemep WHY? -> 중간에 변경되면서 인덱스가 바뀌어서 그럼!
+       // StringBuilder sb = new StringBuilder(my_string);
+       // for(int i = 0; i < indices.length; i++){
+       //     sb.deleteCharAt(indices[i]);
+       // }
+       return answer.replace("0", "");
+   }
+   
+   
+   
+   // 카운트 다운
+   public int[] solution120(int start, int end) {
+       int[] answer = new int[start-end+1];
+       int num = 0;
+       for(int i = start; i >= end; i--){
+           answer[num] = i;
+           num++;
+       }
+       return answer;
+   }
 } // 클래스의 끝
 
 
