@@ -2556,7 +2556,6 @@ public class Solution {
    }
    
    
-   
    // 글자 이어 붙여 문자열 만들기
    public String solution104(String my_string, int[] index_list) {
        StringBuffer sb = new StringBuffer();
@@ -2584,7 +2583,6 @@ public class Solution {
    }
    
    
-   
    // 문자열 여러번 뒤집기
    public String solution106(String my_string, int[][] queries) {
        String answer = "";
@@ -2599,7 +2597,6 @@ public class Solution {
        answer = anstemp.toString();
        return answer;
    }
-   
    
    
    // 배열 만들기 5
@@ -2619,7 +2616,6 @@ public class Solution {
    }
    
    
-   
    // 부분 문자열 이어 붙여 문자열 만들기
    public String solution108(String[] my_strings, int[][] parts) {
        StringBuffer answer = new StringBuffer();
@@ -2636,7 +2632,6 @@ public class Solution {
    }
    
    
-   
    // 문자열의 뒤의 n글자
    public String solution109(String my_string, int n) {        
        // 배열 이용한 풀이
@@ -2646,7 +2641,6 @@ public class Solution {
        // }
        return my_string.substring(my_string.length()-n);
    }
-   
    
   
    // 접미사 배열
@@ -2666,7 +2660,6 @@ public class Solution {
 
        return answer;
    }
-   
    
    
    // 접미사인지 확인하기
@@ -2689,7 +2682,6 @@ public class Solution {
    }
    
    
-   
    // 문자열의 앞의 n 글자
    public String solution112(String my_string, int n) {
        String answer = my_string.substring(0, n);
@@ -2697,12 +2689,10 @@ public class Solution {
    }
    
    
-   
    // 접두사인지 확인하기
    public int solution113(String my_string, String is_prefix) {
        return my_string.startsWith(is_prefix) ? 1 : 0;
    }
-   
    
    
    // 문자열 뒤집기
@@ -2722,7 +2712,6 @@ public class Solution {
    }
    
    
-   
    // 세로 읽기
    public String solution115(String my_string, int m, int c) {
        StringBuilder sb = new StringBuilder();
@@ -2737,7 +2726,6 @@ public class Solution {
        // }
        // return answer;
    }
-   
    
    
    // qr code
@@ -2759,7 +2747,6 @@ public class Solution {
    }
    
    
-   
    // 문자 개수 세기
    public int[] solution117(String my_string) {
        int[] answer = new int[52];
@@ -2776,7 +2763,6 @@ public class Solution {
        }
        return answer;
    }
-   
    
    
    // 배열 만들기 1
@@ -2804,7 +2790,6 @@ public class Solution {
    }
    
    
-   
    // 글자 지우기
    public String solution119(String my_string, int[] indices) {   
        Arrays.sort(indices);
@@ -2824,7 +2809,6 @@ public class Solution {
    }
    
    
-   
    // 카운트 다운
    public int[] solution120(int start, int end) {
        int[] answer = new int[start-end+1];
@@ -2833,6 +2817,659 @@ public class Solution {
            answer[num] = i;
            num++;
        }
+       return answer;
+   }
+   
+   
+   // 가까운 1 찾기
+   public int solution121(int[] arr, int idx) {
+       int answer = -1;
+       for(int i = idx; i < arr.length; i++){
+           // answer = arr[i] == 1 ? i : -1; 
+           // 이렇게 했더니 테스트 3번 오류. WHY? 
+           // 그 다음 원소까지 돌기 때문에 다시 -1이 됨
+           if(arr[i] == 1){
+               answer = i;
+               break;
+           }
+       }
+       return answer;
+   }
+   
+   
+   // 리스트 자르기
+   public int[] solution122(int n, int[] slicer, int[] num_list) {
+       ArrayList<Integer> list = new ArrayList<>();
+       int a = slicer[0];
+       int b = slicer[1];
+       int c = slicer[2];
+       switch (n) {
+           case 1 : 
+               for(int i = 0; i < b+1; i++){
+                   list.add(num_list[i]);
+               }
+               break;
+           case 2 : 
+               for(int i = a; i < num_list.length; i++) {
+                   list.add(num_list[i]);
+               }
+               break;
+           case 3 : 
+               for(int i = a; i < b+1; i++){
+                   list.add(num_list[i]);
+               }
+               break;
+           default :
+               for(int i = a; i < b+1; i = i+c){ // 증감식 헷갈려하지 말기! 
+                   list.add(num_list[i]);
+               }
+               break;
+       }
+       
+       int[] answer = new int[list.size()];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+       
+       return answer;
+   }
+   
+   
+   // 첫 번째로 나오는 음수
+   public int solution123(int[] num_list) {
+       int answer = -1;
+       for(int i = 0; i < num_list.length; i++){
+           if(num_list[i] < 0){
+               answer = i;
+               break;
+           }
+       }
+       return answer;
+       
+       // 더 쉬운 방법 : 바로 return되게 하기
+       // for(int i = 0 ; i < num_list.length; i++){
+       //     if(num_list[i] < 0){
+       //         return i;
+       //     }
+       // }
+       // return -1;
+   }
+   
+   
+   // 배열 만들기 3 
+   public int[] solution124(int[] arr, int[][] intervals) {
+       // a1, b1, a2, b2
+       int a1 = intervals[0][0];
+       int b1 = intervals[0][1];
+       int a2 = intervals[1][0];
+       int b2 = intervals[1][1];
+       int n = b1-a1+1+b2-a2+1; // answer의 길이
+       int[] answer = new int[n];
+       
+       int[] arr1 = Arrays.copyOfRange(arr, a1, b1+1); // intervals[0]
+       int[] arr2 = Arrays.copyOfRange(arr, a2, b2+1); // intervals[1]  
+       
+       // for(int i = 0; i < arr1.length; i++){
+       //     answer[i] = arr1[i];
+       // }
+       // for(int j = arr1.length; j < answer.length; j++){
+       //     answer[j] = arr2[j-arr1.length];            
+       // }
+       
+//        // System.arraycopy를 활용한 방법 -> 이게 훨씬 시간이 덜 걸림!
+//        // Arrays.copyOf(), Arrays.copyOfRange(), System.arraycopy()의 차이를 알아둘 것
+       System.arraycopy(arr1, 0, answer, 0, arr1.length);
+       System.arraycopy(arr2, 0, answer, arr1.length, arr2.length);
+       
+       return answer;
+   }
+   
+   
+   // 2의 영역
+   public int[] solution125(int[] arr) {
+       // 2 처음 나오는 인덱스 체크 -> 2가 나오는 마지막 인덱스 체크
+       // 그만큼 copy 
+       int start = -1; // 맨 처음 나오는 2의 인덱스
+       int end = -1; // 맨 마지막에 나오는 2의 인덱스
+       for(int i = 0; i < arr.length; i++){
+           if(arr[i] == 2 && start == -1){
+               start = i;
+           } else if (arr[i] == 2 && start != -1) {
+               end = i;
+           } 
+           // 이렇게만 하면 1개만 있을 때나, 2가 없을때엔 다른 값이 나오게 됨 (0번 인덱스를 복사)
+           // 찾아보니 맨 처음에 start와 end를 인덱스가 나올 수 없는 다른 수로 만듬. (-1로 설정)
+       }
+       if(start == -1){
+           int[] answer2 = {-1};
+           return answer2;
+       } else if (start != -1 && end == -1) {
+           int[] answer3 = Arrays.copyOfRange(arr, start, start+1);
+           return answer3;
+       }
+       int[] answer = Arrays.copyOfRange(arr, start, end+1);
+       return answer;
+   }
+   
+   
+   // 배열 조각하기
+   public int[] solution126(int[] arr, int[] query) {
+       /* 풀이법  : 다른 분의 풀이 참고 */
+       for(int i = 0; i < query.length; i++){
+           if(i%2 == 0){
+               arr = Arrays.copyOfRange(arr, 0, query[i]+1);
+               // Arrays.copyOfRange(array, startIndex, endIndex) :
+               // 복사할 배열의 길이가 endIndex보다 작을 경우 원본 배열의 마지막 인덱스 이후의 값은 배열의 타입 기본값으로 초기화되어 copy! 
+               // 예) int[] array = {1,2,3,4,5};
+               // arr = Arrays.copyOfRange(array, 4, 6); -> {5, 0};
+               // startIndex가 복사할 배열의 길이보다 크면 exception 발생!
+           } else {
+               arr = Arrays.copyOfRange(arr, query[i], arr.length);
+           }
+       }
+       return arr;
+   }
+   
+   
+   // n 번째 원소부터
+   public int[] solution127(int[] num_list, int n) {
+       int[] answer = Arrays.copyOfRange(num_list, n-1, num_list.length);
+       return answer;
+   }
+   
+   
+   // 순서 바꾸기
+   public int[] solution128(int[] num_list, int n) {    
+       int[] answer = new int[num_list.length];
+       int[] end = Arrays.copyOfRange(num_list, 0, n); // n번째까지의 원소
+       int[] front = Arrays.copyOfRange(num_list, n, num_list.length); // n번째 이후의 원소
+       System.arraycopy(front, 0, answer, 0, front.length);
+       System.arraycopy(end, 0, answer, front.length, end.length);
+       // System.arraycopy(복사할 배열, 복사할 배열의 시작 인덱스, 복사해서 넣을 배열, 복사해 넣을 배열의 시작 인덱스 (해당 배열의 어느 인덱스서부터 붙여넣을 것인가), 복사할 원소의 개수)
+       // 리턴 타입 없음! 
+       return answer;
+       
+       // 보고 감탄했던 다른 분의 풀이
+       // int length = num_list.length;
+       // for(int i = 0; i < n; i++){
+       //     answer[i] = num_list[(i+n)%length];
+       // --> 나머지를 이용해서 푸는 방법인데, 보고 진짜 감탄함!
+       // i+n : n번째 원소부터 카운팅
+       // % length : 인덱스는 어차피 length보다 클 수 없기때문에 나눠서, 필요한만큼 넣을 수 있음!
+       // }
+       // return answer;
+   }
+   
+   
+   // 왼쪽 오른쪽
+   public String[] solution129(String[] str_list) {
+       int check = 0;
+       // check 안쓰고 그냥 바로 return하면 더 편함!
+       for(int i = 0; i < str_list.length; i++){
+           if(str_list[i].equals("l")){
+               str_list = Arrays.copyOfRange(str_list, 0, i);
+               check = 1;
+               break;
+           } else if (str_list[i].equals("r")) {
+               str_list = Arrays.copyOfRange(str_list, i+1, str_list.length);
+               check = 1;
+               break;
+           } 
+       }
+       if (check == 1) {
+           return str_list;
+       } else {
+           return new String[0];
+       }
+   }
+
+   
+   // n 번째 원소까지
+   public int[] solution130(int[] num_list, int n) {
+       return Arrays.copyOfRange(num_list, 0, n);
+   }
+   
+   
+   // n개 간격의 원소들
+   public int[] solution131(int[] num_list, int n) {        
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = 0; i < num_list.length; i += n) {
+           list.add(num_list[i]);
+       }
+       
+       int[] answer = new int[list.size()];
+       for(int i =0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+       return answer;
+   }
+   
+   
+   // 홀수 vs 짝수
+   public int solution132(int[] num_list) {
+       // 실제로는 인덱스 0, 2, 4 얘네들이 홀수번째 원소
+       // 실제로는 인덱스 1, 3, 5 얘네들이 짝수번째 원소
+       int even = 0;
+       int odd = 0;
+       for(int i = 0; i < num_list.length; i++){
+           if(i%2 == 0){
+               odd += num_list[i];
+           } else {
+               even += num_list[i];
+           }
+       }
+       
+       return even >= odd ? even : odd;
+   }
+   
+   
+   // 5명씩
+   public String[] solution133(String[] names) {
+       int length = names.length%5 == 0 ? names.length/5 : names.length/5 + 1;
+       String[] answer = new String[length];
+       for(int i = 0; i < length; i++){
+           answer[i] = names[i*5];
+       }
+       return answer;
+   }
+   
+   
+   // 할 일 목록
+   public String[] solution134(String[] todo_list, boolean[] finished) {
+       ArrayList<String> list = new ArrayList<>();
+       for(int i = 0; i < finished.length; i++){
+           if(!finished[i]){
+               list.add(todo_list[i]);
+           }
+       }
+
+       String[] answer = new String[list.size()];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+       return answer;
+   }
+   
+   
+   // n보다 커질 때까지 더하기
+   public int solution135(int[] numbers, int n) {
+       int answer = 0;
+       for(int num : numbers){
+           answer += num;
+           if (answer > n){
+               break;
+           }
+       }
+       return answer;
+   }
+   
+   
+   // 수열과 구간 쿼리 1
+   public int[] solution136(int[] arr, int[][] queries) {
+       for(int[] query : queries){
+           for(int i = query[0]; i < query[1]+1; i++){
+               arr[i] += 1;
+           }
+       }
+       return arr;
+   }
+   
+   
+   // 조건에 맞게 수열 변환하기 1
+   public int[] solution137(int[] arr) {
+       for(int i = 0; i < arr.length; i++){
+           if(arr[i] >= 50 && arr[i]%2 == 0) {
+               arr[i] = arr[i]/2;
+           } else if (arr[i] < 50 && arr[i]%2 == 1) {
+               arr[i] = arr[i]*2;
+           } 
+       }
+       return arr;
+   }
+   
+   
+   // 조건에 맞게 수열 변환하기 2
+   public int solution138(int[] arr) {
+       // arr[i] >= 50 && arr[i]%2 == 0 -> arr[i] = arr[i]/2
+       // arr[i] < 50 && arr[i]%2 == 1 -> arr[i] = arr[i]*2+1
+       // x번 반복했을 때와 x+1번 반복했을 때가 같은 값일때. 즉, 위의 조건들을 모두 만족하지 않을 때
+       // 해당 x 리턴
+       int answer = 0; // x값
+       for(int i = 0; i < 100000; i++){
+           int[] copyarr = Arrays.copyOf(arr, arr.length);
+           for(int j = 0; j < arr.length; j++){
+               if(arr[j] >= 50 && arr[j]%2 == 0){
+                   arr[j] = arr[j]/2;
+               } else if (arr[j] < 50 && arr[j]%2 == 1){
+                   arr[j] = arr[j]*2+1;
+               }
+           } // for문 돌려 조건에 맞는 원소 변경
+           answer++;
+           if(Arrays.equals(arr, copyarr)){
+               return answer-1;
+           }
+       }
+       return answer;
+   }
+   
+   
+   // 1로 만들기
+   public int solution139(int[] num_list) {
+       // num%2 == 0 -> num/2
+       // num%2 == 1 -> num-1/2 
+       // num_list의 원소가 전부 1일때 연산 횟수 return
+       int answer = 0; // 카운트 될 횟수
+       for(int num : num_list){
+           while (num != 1) {
+               num = num/2; // 나머지 관계없이 몫을 계속 나누다보면 되니 그대로 카운트!
+               answer++;
+           }
+       }
+       return answer;
+   }
+   
+   
+   // 길이에 따른 연산
+   public int solution140(int[] num_list) {
+       // num_list.length >= 11 -> 모든 합
+       // num_list.length < 10 -> 모든 곱 
+       int answer = 1;
+       if(num_list.length >= 11){
+           for(int num : num_list){
+               answer += num;
+           }
+           return answer-1;
+       } else {
+           for(int num : num_list){
+               answer *= num;
+           }
+           return answer;
+       }
+   }
+   
+   
+   // 원하는 문자열 찾기
+   public int solution141(String myString, String pat) {      
+       myString = myString.toLowerCase();
+       pat = pat.toLowerCase();
+       if(myString.contains(pat)){
+           return 1;
+       } 
+       return 0;
+       
+       // /* 이렇게 했더니 테스트 케이스 2번, 5번 실패. WHY? */
+       // // i가 myString.length() - pat.length() 까지 와야하므로 < 가 아닌 <= 가 와야했음!
+       // contains() 메서드를 제때 떠올리지 못해서 어렵게 돌아갔다!
+       // for(int i = 0; i <= myString.length()-pat.length(); i++){
+       //     String str = myString.substring(i, i+pat.length()); // i번부터 pat.length(); 
+       //     if(str.equalsIgnoreCase(pat)){
+       //         // String.equalsIgnoreCase(str) : 알파벳 대소문자를 무시하고 동일한지 체크하는 메서드
+       //         return 1;
+       //     } 
+       // }
+       // return 0;
+   }
+   
+   
+   // 대문자로 바꾸기
+   public String solution142(String myString) {
+       myString = myString.toUpperCase();
+       return myString;
+   }
+   
+   
+   // 소문자로 바꾸기
+   public String solution143(String myString) {
+       return myString.toLowerCase();
+   }
+   
+   
+   // 배열에서 문자열 대소문자 변환하기
+   public String[] solution144(String[] strArr) {
+       for(int i = 0; i < strArr.length; i++){
+           if(i%2 == 0){
+               strArr[i] = strArr[i].toLowerCase();
+           } else {
+               strArr[i] = strArr[i].toUpperCase();
+           }
+           // 삼항연산자로 더 편하게 쓸 수 있음
+           // strArr[i] = i%2 == 0 ? strArr[i].toLowerCase() : strArr[i].toUpperCase();
+       }
+       return strArr;
+   }
+   
+   
+   // A 강조하기
+   public String solution145(String myString) {   
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0; i < myString.length(); i++){
+           if(myString.charAt(i) >= 65 && myString.charAt(i) < 91 && myString.charAt(i) != 'A'){
+               sb.append((char)(myString.charAt(i) + 32));
+           } else if (myString.charAt(i) == 'a') {
+               sb.append("A");
+           } else {
+               sb.append(myString.charAt(i));
+           }
+       }
+       return sb.toString();
+       /* 풀이법 1 : String을 이용한 풀이 (시간 오래 걸림) */
+       // String answer = "";
+       // for(int i = 0; i < myString.length(); i++){
+       //     if(myString.charAt(i) == 'a'){
+       //         answer += "A";
+       //     } else if (myString.charAt(i) >= 65 && myString.charAt(i) < 91 && myString.charAt(i) != 'A') { 
+       //         answer += (char)(myString.charAt(i) + 32);
+       //         // 아스키코드로 대소문자는 32 차이 (65 - 90 / 97 - 122)
+       //         // 계속 숫자로만 떠서 봤더니 charAt() + int = int형으로 나오므로
+       //         // 앞에 (char)로 형변환해줘야 했음!
+       //     } else {
+       //         answer += myString.charAt(i);
+       //     }
+       // }
+       // return answer;
+       
+       /* 풀이법 2 : 다른 사람의 풀이 참고 */
+       // 문제를 생각해보면 전부 소문자로 먼저 바꾼 다음, a만 A로 바꾸면 됨!
+       // myString = myString.toLowerCase();
+       // return myString.replaceAll("a", "A");
+       
+       /* replace, replaceAll 메서드 */
+       // String.replace(String a, String b) : a를 b로 치환
+       // String.replaceAll(String a, String b) : a를 b로 치환
+       // 차이점 : replaceAll()은 '정규표현식' 을 매개변수로 가질 수 있다.
+   }
+   
+   
+   // 특정한 문자를 대문자로 바꾸기
+   public String solution146(String my_string, String alp) {
+       StringBuilder sb = new StringBuilder();
+       for(int i = 0; i < my_string.length(); i++){
+           if(my_string.charAt(i) == alp.charAt(0)){
+               sb.append((char)(my_string.charAt(i) -32));
+           } else {
+               sb.append(my_string.charAt(i));
+           }
+       }
+       return sb.toString();
+       
+       /* 풀이법 2 : 다른 사람의 풀이 - replaceAll() */
+       // return my_string.replaceAll(alp, alp.toUpperCase());
+   }
+   
+   
+   // 특정 문자열로 끝나는 가장 긴 부분 문자열 찾기
+   public String solution147(String myString, String pat) {
+       // 내 풀이법 1 : 그대로 for문 돌려서 사용
+       int idx = 0;
+       for(int i = 0; i <= myString.length()-pat.length(); i++){
+           if(myString.substring(i, i+pat.length()).equals(pat)){
+               idx = i+pat.length();
+           }
+       }
+       return myString.substring(0, idx);
+       
+       /* 다른 분의 풀이법 : lastIndexOf() 메서드 사용 */
+       // indexOf() -> "앞"에서부터 특정 문자/문자열을 찾아 "처음 발견되는" 인덱스 반환
+       // 없으면 -1 반환 
+       // lastIndexOf() -> "뒤"에서부터 특정 문자/문자열을 찾아 "처음 발견되는" 인덱스 반환
+       // 없으면 -1 반환
+       // int idx = myString.lastIndexOf(pat); // 해당 문자열의 맨 앞 인덱스 반환임!
+       // return myString.substring(0, idx + pat.length());
+   }
+   
+   
+   // 문자열이 몇 번 등장하는지 세기
+   public int solution148(String myString, String pat) {
+       int answer = 0;
+       for(int i = 0; i <= myString.length()-pat.length(); i++){
+           if(myString.substring(i, i+pat.length()).equals(pat)){
+               answer++;
+           }
+       }
+       return answer;
+   }
+   
+   
+   // ad 제거하기
+   public String[] solution149(String[] strArr) {
+       ArrayList<String> list = new ArrayList<>();
+       for(int i = 0; i < strArr.length; i++){
+           if(!strArr[i].contains("ad")){
+               list.add(strArr[i]);
+           }
+       }
+       return list.toArray(new String[list.size()]);
+       // toArray() 메서드 사용 시 매개변수에 사용할 배열을 꼭 넣어줘야함
+   }
+   
+   
+   // 공백으로 구분하기 1
+   public String[] solution150(String my_string) {
+       String[] answer = my_string.split(" ");
+       return answer;
+   }
+   
+   
+   // 공백으로 구분하기 2
+   public String[] solution151(String my_string) {
+       ArrayList<String> list = new ArrayList<>();
+       String[] arr = my_string.split(" ");
+       for(int i = 0; i < arr.length; i++){
+           if(!arr[i].equals("")){
+               list.add(arr[i]);
+           }
+       }
+       
+       return list.toArray(new String[list.size()]);
+       
+       // 풀이법 2 : 정규표현식을 이용한 방법 
+       // my_String = my_String.trim();
+       // return my_String.split(" +");
+   }
+   
+   
+   // x 사이의 개수
+   public int[] solution152(String myString) {
+       String[] arr = myString.split("x", -1);
+       // split(String regex, int limit)
+       // regex에 따라 나누되, 나눠지는 크기를 limit으로 제한한다.
+       // limit가 regex의 개수와 같거나 더 클 경우에는 해당하는 만큼의 String[]을 돌려주나,
+       // 더 적을 경우에는 그 뒤에 구분하지 않고 그만큼의 크기를 가진 String[]을 반환한다.
+       // split(String, -1) : 배열의 크기를 제한하지 않고 끝까지 체크한다는 소리다.
+       // 테스트케이스 1의 경우 마지막 x때문에 그냥 split("x")를 해버리면 끝을 셀 수 없는데,
+       // 이렇게하면 끝까지 읽어준다. split("x", myString.length())를 해도 OK.
+       int[] answer = new int[arr.length];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = arr[i].length();
+       }
+       return answer;
+  
+//맨 처음 풀었던 방법 : 시간이 너무 오래 걸리고, for문을 여러번 돌려야함!
+//        int xCount = 0;
+//        for(int i = 0; i < myString.length(); i++){
+//            if(myString.charAt(i) == 'x'){
+//                xCount++;
+//            }
+//        }
+//        int[] answer = new int[xCount+1];
+//        String[] arr = myString.split("");
+//        int cnt = 0;
+//        for(int i = 0; i < arr.length; i++){
+//            if(arr[i].equals("x")){
+//                cnt++;
+//            } else {
+//                answer[cnt]++;
+//            }
+//        }
+
+//        return answer;
+   }
+   
+   
+   // 문자열 잘라서 정렬하기
+   public String[] solution153(String myString) {
+       // 풀이법 1 : 이렇게 풀었더니 테스트케이스는 통과하는데 제출 시 전부 실패. why?
+       // 반례 : "dxccxbbbxxaaaa" ["aaaa", "bbb", "cc", "d"] 
+       // 이렇게 하면 반례의 경우 ["", "aaaa", "bbb", "cc", "d"]로 나옴
+       // xx의 경우 공백이 생기며 해당 공백도 인식되기 때문.
+       // split("x+")로 할 경우 뒤의 공백은 제거되나, 앞에 공백이 생기는 경우 ("xxccb"처럼) 가 해결되지 않음         
+       String[] arr = myString.split("x+");
+       Arrays.sort(arr);
+       ArrayList<String> list = new ArrayList();
+       for(String str : arr){
+           if(!str.equals("")){ // isEmpty()를 써도 OK! 이때 isBlank()와의 차이를 알아둘 것
+               list.add(str);
+           }
+       }
+       return list.toArray(new String[0]);
+   }
+   
+   
+   // 간단한 식 계산하기
+   public int solution154(String binomial) {
+       int answer = 0;
+       // 우선 binomial을 쪼개자
+       String[] arr = binomial.split(" ");
+       // arr[0]이 a, arr[1]이 op, arr[2]가 b임
+       int a = Integer.parseInt(arr[0]);
+       int b = Integer.parseInt(arr[2]);
+       switch(arr[1]){
+           case "+" : answer = a + b;
+               break;
+           case "-" : answer = a - b;
+               break;
+           case "*" : answer = a * b;
+               break;
+       }
+       return answer;
+   }
+   
+   
+   // 문자열 바꿔서 찾기
+   public int solution155(String myString, String pat) {
+       String[] arr = myString.split("");
+       StringBuilder sb = new StringBuilder();
+       int answer = 0;
+       for(String str : arr){
+           if(str.equals("A")){
+               sb.append("B");
+           } else if (str.equals("B")){
+               sb.append("A");
+           } else {
+               sb.append(str);
+           }
+       }
+       String compare = sb.toString();
+       if(compare.contains(pat)){
+           answer = 1;
+       }
+       return answer;
+   }
+   
+   
+   // rny_string
+   public String solution156(String rny_string) {
+       String answer = rny_string.replace("m", "rn");
        return answer;
    }
 } // 클래스의 끝
