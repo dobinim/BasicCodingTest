@@ -3472,6 +3472,270 @@ public class Solution {
        String answer = rny_string.replace("m", "rn");
        return answer;
    }
+   
+   
+   // 세 개의 구분자
+   public String[] solution157(String myStr) {
+       // a, b, c로 문자열 나누기
+       String[] arr = myStr.split("[abc]");
+       if(arr.length == 0){
+           String[] answer = {"EMPTY"};
+           return answer;
+       } 
+       ArrayList<String> list = new ArrayList<>();
+       for(String str : arr){
+           if(!str.isBlank()){
+               list.add(str);
+           }
+       }
+       return list.toArray(new String[0]);
+   }
+   
+   
+   // 배열의 원소만큼 추가하기
+   public int[] solution158(int[] arr) {
+       ArrayList<Integer> list = new ArrayList<>();
+       // 5가 5번, 1이 1번, 4가 4번 이런 식으로 나와야 함
+       // 각 숫자를 카운팅해서 같아지면 넘겨줘야 하나?
+       for(int i = 0; i < arr.length; i++){
+           for(int j = 0; j < arr[i]; j++){
+               list.add(arr[i]);
+           }
+       }
+       
+       int[] answer = new int[list.size()];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+       return answer;
+   }
+   
+   
+   // 빈 배열에 추가, 삭제하기
+   public int[] solution159(int[] arr, boolean[] flag) {
+       // flag[i]가 true -> arr[i]를 arr[i]*2번 추가,
+       // false -> 마지막 arr[i]개 원소 제거   
+       
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = 0; i < flag.length; i++){
+           if(flag[i]){
+               for(int j = 0; j < arr[i]*2; j++){
+                   list.add(arr[i]);
+               }
+           } else {
+               for(int j = 0; j < arr[i]; j++){ 
+                   list.remove(list.size()-1);
+                   // 계속 런타임 왜 실패하나 했더니 처음에 list.remove(list.size()-1-k)를 해놨다.
+                   // 이미 for문을 통해 k번 지우는건데 바본가봄
+               }
+           }
+       }
+       
+       int[] answer = new int[list.size()];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+       return answer;
+   }
+   
+   
+   // 배열 만들기 6
+   public int[] solution160(int[] arr) {
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = 0; i < arr.length; i++){
+           if(i == 0){
+               list.add(arr[i]);
+               System.out.println("이 if문이 제대로 돌았음"); // if문 제대로 도는지 확인용
+           } else if (i > 0 && list.get(list.size()-1) == arr[i]) {
+               list.remove(list.size()-1);
+           } else if (i > 0 && list.get(list.size()-1) != arr[i]){
+               list.add(arr[i]);
+           }
+       }
+       
+       
+       if(list.size() == 0){
+           int[] answer = {-1};
+           return answer;
+       } else {
+           int[] answer = new int[list.size()];
+           for(int i = 0; i < list.size(); i++){
+               answer[i] = list.get(i);
+           }
+           return answer;
+       }
+   }
+   
+   
+   // 무작위로 K개의 수 뽑기
+   public int[] solution161(int[] arr, int k) {
+       // 서로 다른 수를 골랐을 때, 그 개수가 k보다 작으면 -1로 채우기
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int num : arr){
+           if(!list.contains(num) && list.size() < k){
+               list.add(num);
+           } else if (list.size() == k) {
+               break;
+           }
+       }
+       
+       if(list.size() < k){
+           for(int i = list.size(); i < k; i++){ // 조건문 생성 시 유의!
+               list.add(-1);
+           }
+       }
+       
+       int[] answer = new int[list.size()];
+       for(int i = 0; i < answer.length; i++){
+           answer[i] = list.get(i);
+       }
+
+       return answer;
+   }
+   
+   
+   // 배열의 길이를 2의 거듭제곱으로 만들기
+   public int[] solution162(int[] arr) {
+       // 2의 10승이 1024니까, 2의 9승 (512) 까지만 생각하면 됨.
+       // 바보였다............arr의 길이가 1000이므로 1024까지 해당되는 거였음
+       int idx = 0;
+       for(int i = 0; i < 11; i++){
+           if(arr.length <= Math.pow(2, i)){
+               idx = (int)Math.pow(2, i);
+               break;
+           }
+       }
+       int[] answer = new int[idx];
+       
+       for(int i = 0; i < arr.length; i++){
+           answer[i] = arr[i];
+       }
+       
+       // 어차피 배열 선언할 때 int[] 배열은 기본값인 0으로 채워지기때문에 굳이 안해도 됨! 
+       // if(arr.length < answer.length) {
+       //     for(int i = arr.length; i < answer.length; i++){
+       //         answer[i] = 0;
+       //     }
+       // }
+       return answer;
+   }
+   
+   
+   // 배열 비교하기
+   public int solution163(int[] arr1, int[] arr2) {
+       if(arr1.length > arr2.length){
+           return 1;
+       } else if (arr1.length < arr2.length) {
+           return -1;
+       } else if (arr1.length == arr2.length) {
+           int sum1 = 0;
+           int sum2 = 0;
+           for(int i = 0; i < arr1.length; i++){
+               sum1 += arr1[i];
+               sum2 += arr2[i];
+           }
+           if(sum1 > sum2){
+               return 1;
+           } else if (sum1 < sum2) {
+               return -1;
+           } else {
+               return 0;
+           }
+       }
+       return 0;
+   }
+   
+   
+   // 문자열 묶기
+   public int solution164(String[] strArr) {
+       // 각 원소 str의 개수끼리 묶어서, 가장 긴 애의 개수를 return
+       // 해당 원소의 길이는 30까지만 해당하니까, int 배열의 길이가 30인 애를 만들어서 카운팅하자
+       int[] arr = new int[30]; // 0 ~ 29까지니까 -1 해줘야함.
+       for(int i = 0; i < strArr.length; i++){
+           arr[strArr[i].length()-1]++;
+       }
+       Arrays.sort(arr);
+       return arr[29];
+   }
+   
+   
+   // 배열의 길이에 따라 다른 연산하기
+   public int[] solution165(int[] arr, int n) {
+       int[] answer = new int[arr.length];
+       // arr.length%2 == 0 -> arr[n%2 != 0] + n 
+       // arr.length%2 != 0 -> arr[n%2 == 0] + n
+       if(arr.length%2 == 0){
+           for(int i = 0; i < arr.length; i++){
+               answer[i] = i%2 != 0 ? arr[i] + n : arr[i];
+           }
+       } else {
+           for(int i = 0; i < arr.length; i++) {
+               answer[i] = i%2 == 0 ? arr[i] + n : arr[i];
+           }
+       }
+       return answer;
+   }
+   
+   
+   // 뒤에서 5등까지
+   public int[] solution166(int[] num_list) {
+       Arrays.sort(num_list);
+       int[] answer = {num_list[0], num_list[1], num_list[2], num_list[3], num_list[4]};
+       // Arrays.copyOfRange() 를 쓰면 더 간단함!
+       // Arrays.copyOfRange(num_list, 0, 5);
+       return answer;
+   }
+   
+   
+   // 뒤에서 5등 위로
+   public int[] solution167(int[] num_list) {
+       Arrays.sort(num_list);
+       return Arrays.copyOfRange(num_list, 5, num_list.length);
+   }
+   
+   
+   // 전국 대회 선발 고사
+   public int solution168(int[] rank, boolean[] attendance) {
+       // "등수" 이므로 가장 낮은 순부터 체크해야 됨
+       ArrayList<Integer> list = new ArrayList<>();
+       for(int i = 0; i < rank.length; i++){
+           if(attendance[i]){
+               list.add(rank[i]);
+           }
+       }
+       Collections.sort(list); // ArrayList를 오름차순으로 정렬하는 메서드
+       int a = 0;
+       int b = 0;
+       int c = 0;
+       // 등수이므로 list[0]부터 list[2]까지가 해당됨.
+       for(int i = 0; i < rank.length; i++){
+           if(rank[i] == list.get(0)){
+               a = i;
+           } else if (rank[i] == list.get(1)){
+               b = i;
+           } else if (rank[i] == list.get(2)){
+               c = i;
+           }
+       }
+       return 10000*a + 100*b + c;
+   }
+   
+   
+   // 정수 부분
+   public int solution169(double flo) {
+       return (int)flo;
+   }
+   
+   
+   // 문자열 정수의 합
+   public int solution170(String num_str) {
+       int answer = 0;
+       String[] arr = num_str.split("");
+       for(String str : arr){
+           answer += Integer.parseInt(str);
+       }
+       return answer;
+   }
 } // 클래스의 끝
 
 
